@@ -29,5 +29,12 @@
   "bugs": {
     "url": "https://github.com/xerysherry/colors.ts/issues"
   },
-  "homepage": "https://github.com/xerysherry/colors.ts#readme"
+  "homepage": "https://github.com/xerysherry/colors.ts#readme",
+  "files":[
+    "dist",
+    "lib",
+    ".gitignore",
+    "README.md",
+    "tsconfig.json"
+  ]
 }
