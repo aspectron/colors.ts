@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.paint = exports.more_detail_on_color256 = exports.show_cursor = exports.clear_screen = exports.position = exports.theme = exports.support = exports.enable = exports.colors = exports.Support = void 0;
 var os = require("os");
 var _codes_base = {
     reset: "\u001B[0m",
@@ -415,13 +416,18 @@ function _check_support() {
     }
     return Support.DISABLE;
 }
+function defineProperty(name, obj) {
+    if (String.prototype.hasOwnProperty(name))
+        return;
+    Object.defineProperty(String.prototype, name, obj);
+}
 function _codes_init() {
     _support = _check_support();
     var _loop_1 = function (key) {
         var ctrl = _codes_base[key];
         if (ctrl == null)
             return "continue";
-        Object.defineProperty(String.prototype, key, {
+        defineProperty(key, {
             get: function () {
                 if (_enable) {
                     if (_support < Support.BASE)
@@ -441,96 +447,101 @@ function _codes_init() {
     for (var key in _codes_base) {
         _loop_1(key);
     }
-    String.prototype.color_at_256 = function (idx) {
+    var assign = function (name, value) {
+        if (String.prototype.hasOwnProperty(name))
+            return;
+        String.prototype[name] = value;
+    };
+    assign("color_at_256", function (idx) {
         if (_check_reset_end((this)))
             return _get_256bits_color_code(idx) + this;
         else
             return _get_256bits_color_code(idx) + this + _reset_ctrl;
-    };
-    String.prototype.color_bg_at_256 = function (idx) {
+    });
+    assign("color_bg_at_256", function (idx) {
         if (_check_reset_end((this)))
             return _get_256bits_color_bg_code(idx) + this;
         else
             return _get_256bits_color_bg_code(idx) + this + _reset_ctrl;
-    };
-    String.prototype.gray = function (level) {
+    });
+    assign("gray", function (level) {
         if (_check_reset_end((this)))
             return _get_gray_code(level) + this;
         else
             return _get_gray_code(level) + this + _reset_ctrl;
-    };
-    String.prototype.grey = String.prototype.gray;
-    String.prototype.gray_bg = function (level) {
+    });
+    assign("grey", String.prototype.gray);
+    assign("gray_bg", function (level) {
         if (_check_reset_end((this)))
             return _get_gray_bg_code(level) + this;
         else
             return _get_gray_bg_code(level) + this + _reset_ctrl;
-    };
-    String.prototype.grey_bg = String.prototype.gray_bg;
-    String.prototype.colors = function (color, noreset) {
+    });
+    assign("grey_bg", String.prototype.gray_bg);
+    assign("colors", function (color, noreset) {
         return colors(color, this, noreset);
-    };
-    String.prototype.hex = function (hex) {
+    });
+    assign("hex", function (hex) {
         return _get_color_by_hex(hex, false) + this + _reset_ctrl;
-    };
-    String.prototype.hex_bg = function (hex) {
+    });
+    assign("hex_bg", function (hex) {
         return _get_color_by_hex(hex, true) + this + _reset_ctrl;
-    };
-    String.prototype.rgb = function (r, g, b) {
+    });
+    assign("rgb", function (r, g, b) {
         return _get_color_by_rgb(r, g, b, false) + this + _reset_ctrl;
-    };
-    String.prototype.rgb_bg = function (r, g, b) {
+    });
+    assign("rgb_bg", function (r, g, b) {
         return _get_color_by_rgb(r, g, b, true) + this + _reset_ctrl;
-    };
-    String.prototype.paint = function (pt) {
+    });
+    assign("paint", function (pt) {
         return paint(pt, this);
-    };
-    String.prototype.up = function (n) {
+    });
+    assign("up", function (n) {
         return _up(n) + this;
-    };
-    String.prototype.down = function (n) {
+    });
+    assign("down", function (n) {
         return _down(n) + this;
-    };
-    String.prototype.right = function (n) {
+    });
+    assign("right", function (n) {
         return _right(n) + this;
-    };
-    String.prototype.left = function (n) {
+    });
+    assign("left", function (n) {
         return _left(n) + this;
-    };
-    String.prototype.next_line = function (n) {
+    });
+    assign("next_line", function (n) {
         return _next_line(n) + this;
-    };
-    String.prototype.prev_line = function (n) {
+    });
+    assign("prev_line", function (n) {
         return _prev_line(n) + this;
-    };
-    String.prototype.column = function (n) {
+    });
+    assign("column", function (n) {
         return _column(n) + this;
-    };
-    String.prototype.position = function (x, y) {
+    });
+    assign("position", function (x, y) {
         return _position(x, y) + this;
-    };
-    Object.defineProperty(String.prototype, "load_position", {
+    });
+    defineProperty("load_position", {
         get: function () {
             return _load_position_code + this;
         },
         enumerable: false,
         configurable: false
     });
-    Object.defineProperty(String.prototype, "save_position", {
+    defineProperty("save_position", {
         get: function () {
             return _save_position_code + this;
         },
         enumerable: false,
         configurable: false
     });
-    Object.defineProperty(String.prototype, "clear_screen", {
+    defineProperty("clear_screen", {
         get: function () {
             return _clear_screen_code + this;
         },
         enumerable: false,
         configurable: false
     });
-    Object.defineProperty(String.prototype, "clear_line", {
+    defineProperty("clear_line", {
         get: function () {
             return _clear_line_code + this;
         },
@@ -541,7 +552,7 @@ function _codes_init() {
 function _theme_init() {
     var _loop_2 = function (key) {
         var _key = key;
-        Object.defineProperty(String.prototype, key, {
+        defineProperty(key, {
             get: function () {
                 if (_enable) {
                     var s = _theme[key];

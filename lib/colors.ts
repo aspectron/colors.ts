@@ -491,6 +491,12 @@ function _check_support(): Support {
 	return Support.DISABLE;
 }
 
+function defineProperty(name:string, obj:any){
+    if(String.prototype.hasOwnProperty(name))
+        return
+    Object.defineProperty(String.prototype, name, obj);
+}
+
 function _codes_init() {
     _support = _check_support();
 
@@ -498,7 +504,7 @@ function _codes_init() {
         let ctrl = _codes_base[key]
         if (ctrl == null)
             continue;
-        Object.defineProperty(String.prototype, key, {
+        defineProperty(key, {
             get: function (): string {
                 if (_enable) {
                     if(_support < Support.BASE)
@@ -516,107 +522,113 @@ function _codes_init() {
         })
     }
 
-    String.prototype.color_at_256 = function (idx: number): string {
+    let assign = (name:string, value:any)=>{
+        if(String.prototype.hasOwnProperty(name))
+            return
+        String.prototype[name] = value;
+    }
+
+    assign("color_at_256", function (idx: number): string {
         if (_check_reset_end(<string>(this)))
             return _get_256bits_color_code(idx) + this;
         else
             return _get_256bits_color_code(idx) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.color_bg_at_256 = function (idx: number): string {
+    assign("color_bg_at_256", function (idx: number): string {
         if (_check_reset_end(<string>(this)))
             return _get_256bits_color_bg_code(idx) + this;
         else
             return _get_256bits_color_bg_code(idx) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.gray = function (level: number): string {
+    assign("gray", function (level: number): string {
         if (_check_reset_end(<string>(this)))
             return _get_gray_code(level) + this;
         else
             return _get_gray_code(level) + this + _reset_ctrl;
-    }
-    String.prototype.grey = String.prototype.gray;
+    })
+    assign("grey", String.prototype.gray)
 
-    String.prototype.gray_bg = function (level: number): string {
+    assign("gray_bg", function (level: number): string {
         if (_check_reset_end(<string>(this)))
             return _get_gray_bg_code(level) + this;
         else
             return _get_gray_bg_code(level) + this + _reset_ctrl;
-    }
-    String.prototype.grey_bg = String.prototype.gray_bg;
+    })
+    assign("grey_bg", String.prototype.gray_bg);
 
-    String.prototype.colors = function (color: string | string[], noreset?: boolean): string {
+    assign("colors", function (color: string | string[], noreset?: boolean): string {
         return colors(color, this, noreset);
-    }
+    })
 
-    String.prototype.hex = function (hex:string): string {
+    assign("hex", function (hex:string): string {
         return _get_color_by_hex(hex, false) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.hex_bg = function (hex:string): string {
+    assign("hex_bg", function (hex:string): string {
         return _get_color_by_hex(hex, true) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.rgb = function (r:number, g:number, b:number): string {
+    assign("rgb", function (r:number, g:number, b:number): string {
         return _get_color_by_rgb(r, g, b, false) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.rgb_bg = function (r:number, g:number, b:number): string {
+    assign("rgb_bg", function (r:number, g:number, b:number): string {
         return _get_color_by_rgb(r, g, b, true) + this + _reset_ctrl;
-    }
+    })
 
-    String.prototype.paint = function (pt: Painter[]): string {
+    assign("paint", function (pt: Painter[]): string {
         return paint(pt, this);
-    }
+    })
 
-    String.prototype.up = function (n: number): string {
+    assign("up", function (n: number): string {
         return _up(n) + this;
-    }
-    String.prototype.down = function (n: number): string {
+    })
+    assign("down", function (n: number): string {
         return _down(n) + this;
-    }
-    String.prototype.right = function (n: number): string {
+    })
+    assign("right", function (n: number): string {
         return _right(n) + this;
-    }
-    String.prototype.left = function (n: number): string {
+    })
+    assign("left", function (n: number): string {
         return _left(n) + this;
-    }
+    })
 
-    String.prototype.next_line = function (n: number): string {
+    assign("next_line", function (n: number): string {
         return _next_line(n) + this;
-    }
-    String.prototype.prev_line = function (n: number): string {
+    })
+    assign("prev_line", function (n: number): string {
         return _prev_line(n) + this;
-    }
-    String.prototype.column = function (n: number): string {
+    })
+    assign("column", function (n: number): string {
         return _column(n) + this;
-    }
-    String.prototype.position = function (x: number, y: number): string {
+    })
+    assign("position", function (x: number, y: number): string {
         return _position(x, y) + this;
-    }
-    Object.defineProperty(String.prototype, "load_position", {
+    })
+    defineProperty("load_position", {
         get: function (): string {
             return _load_position_code + this;
         },
         enumerable: false,
         configurable: false
     })
-    Object.defineProperty(String.prototype, "save_position", {
+    defineProperty("save_position", {
         get: function (): string {
             return _save_position_code + this;
         },
         enumerable: false,
         configurable: false
     })
-    Object.defineProperty(String.prototype, "clear_screen", {
+    defineProperty("clear_screen", {
         get: function (): string {
             return _clear_screen_code + this;
         },
         enumerable: false,
         configurable: false
     })
-    Object.defineProperty(String.prototype, "clear_line", {
+    defineProperty("clear_line", {
         get: function (): string {
             return _clear_line_code + this;
         },
@@ -628,7 +640,7 @@ function _codes_init() {
 function _theme_init() {
     for (const key in _theme) {
         let _key = key;
-        Object.defineProperty(String.prototype, key, {
+        defineProperty(key, {
             get: function (): string {
                 if (_enable) {
                     let s = _theme[key];
