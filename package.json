@@ -1,9 +1,9 @@
 {
-  "name": "colors.ts",
-  "version": "1.0.20",
-  "main": "dist/colors.js",
+  "name": "@aspectron/colors.ts",
+  "version": "1.0.0",
+  "main": "dist/lib/colors.js",
   "scripts": {
-    "build": "tsc",
+    "prepare": "rm -rf ./dist && tsc",
     "start": "node ./build/sample/sample.js",
     "test": "echo ===Sample1===&&node ./build/sample/sample.js &&echo ===Sample2===&&node ./build/sample/sample1.js&&echo ===Sample3===&&node ./build/sample/sample2.js"
   },
@@ -20,7 +20,7 @@
   "author": "xerysherry",
   "license": "Apache-2.0",
   "dependencies": {},
-  "description": "Console colors dev by Typescript",
+  "description": "Console colors dev by Typescript (customized not to interfere with other similar color libraries)",
   "devDependencies": {
     "@types/node": "^9.3.0",
     "typescript": "^2.6.2"
